@@ -1,7 +1,7 @@
 # Banco Python S.A.
 
 ### Exemplo de <strong>criação de POO</strong> de um Banco Fictício em <strong>linguagem Python</strong>.
-DESCRIÇÂO:<br/>
+DESCRIÇÃO:<br/>
 Estrutura de classes e objetos que compõem uma estrutura simplificada de um sistema financeiro com diferentes classes de Clietes e Contas, assim como caracteristicas e métodos específicos para alguns a fim de demonstrar o conceito de Encapsulamento, Herança e Polimorfismo em linguagem de programação Python + Design Patterns.
  
 Conceitos de Classes e Objetos, Encapsulamento, Herança e Polimorfismo<br/>
