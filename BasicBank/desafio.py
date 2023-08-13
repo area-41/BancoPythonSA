@@ -28,7 +28,7 @@ def depositar(valor, saldo, extrato, /):
         print("Operação falhou! O valor informado é inválido.")
 
 
-def sacar(*, saldo, valor, extrato, limite, numero_saques):
+def sacar(saldo, valor, extrato, limite, numero_saques):
     excedeu_saldo = valor > saldo
     excedeu_limite = valor > limite
     excedeu_saques = numero_saques >= LIMITE_SAQUES
@@ -43,8 +43,11 @@ def sacar(*, saldo, valor, extrato, limite, numero_saques):
         saldo -= valor
         extrato += f"Saque: R$ {valor:.2f}\n"
         numero_saques += 1
+        return saldo, extrato
     else:
         print("Operação falhou! O valor informado é inválido.")
+
+    return saldo, extrato
 
 
 def exibir_extrato(saldo, /, *, extrato):
@@ -55,13 +58,21 @@ def exibir_extrato(saldo, /, *, extrato):
 
 
 def criar_usuario(usuarios):
-    pass
+    nome = str(input("Digite o nome do usuário: "))
+    cpf = int(input("CPF: "))
+    usuario = nome, cpf
+    usuarios.append(usuario)
+    print(f"Usuário {nome} adicionado com sucesso.")
+    return usuarios
+
 
 def filtrar_usuario(cpf, usuarios):
     pass
 
 def listar_usuarios(usuarios):
-    pass
+    for usuario in usuarios:
+        print(f"Usuário: {usuario[0]} - CPF: {usuario[1]}")
+
 
 def criar_conta(agencia, numero_conta, usuarios):
     pass
@@ -85,7 +96,17 @@ def main():
             valor = float(input("Informe o valor do depósito: "))
             saldo, extrato = depositar(valor, saldo, extrato)
 
+            # try:
+            #     valor = float(input("Informe o valor do depósito: "))
+            #     if valor is float:
+            #         saldo, extrato = depositar(valor, saldo, extrato)
+            # except:
+            #     print("Valor inválido.")
+
         elif opcao == "s":
+            valor = float(input("Informe o valor do saque: "))
+            saldo, extrato = sacar(saldo, valor, extrato, limite, numero_saques)
+
             # valor = float(input("Informe o valor do saque: "))
             # excedeu_saldo = valor > saldo
             # excedeu_limite = valor > limite
@@ -107,8 +128,8 @@ def main():
         elif opcao == "e":
             exibir_extrato(saldo, extrato=extrato)
 
-        elif opcao == "c":
-            criar_usuario(usuarios)
+        elif opcao == "u":
+            usuarios = criar_usuario(usuarios)
 
         elif opcao == "lu":
             listar_usuarios(usuarios)
