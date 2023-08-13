@@ -1,5 +1,5 @@
 ## Desafio DIO 
-
+<img src="https://hermes.dio.me/tracks/f5dba255-da18-427a-a02a-ca11a339c1cd.png" width="150" height="150"></br>
 ###### Potência Tech powered by iFood | Ciência de Dados
 
 DESCRIÇÃO
@@ -19,6 +19,8 @@ práticas e eficientes.</br>
 
 ##### Back-End | Básico
 </br></br>
+
+
 
 ESPECIALISTA : Guilherme Carvalho</br>
 Python Consultant, Oak Solutions</br>
