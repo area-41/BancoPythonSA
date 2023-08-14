@@ -59,10 +59,12 @@ def exibir_extrato(saldo, /, *, extrato):
 
 def criar_usuario(usuarios):
     nome = str(input("Digite o nome do usuário: "))
+    sobrenome = str(input("Digite o sobrenome: "))
     cpf = int(input("CPF: "))
-    usuario = nome, cpf
+    usuario = nome, sobrenome, cpf
     usuarios.append(usuario)
-    print(f"Usuário {nome} adicionado com sucesso.")
+    print(f"\nUsuário {nome} {sobrenome}".center(200),
+          f"\nadicionado com sucesso!".center(200))
     return usuarios
 
 
@@ -71,14 +73,28 @@ def filtrar_usuario(cpf, usuarios):
 
 def listar_usuarios(usuarios):
     for usuario in usuarios:
-        print(f"Usuário: {usuario[0]} - CPF: {usuario[1]}")
+        print(f"Usuário: {usuario[0]} {usuario[1]} - CPF: {usuario[2]}")
 
 
 def criar_conta(agencia, numero_conta, usuarios):
-    pass
+    usuario = str(input("Qual usuário quer adicionar à conta? "))
+    print(usuarios)
+    for i in range(len(usuarios)):
+        if usuario == usuarios[i][0]:
+           conta = agencia, numero_conta, usuario
+           print(f"\nConta com {usuario} criada com sucesso."
+                 f"\nNúmero da conta: {numero_conta}"
+                 f"\nAgência: {agencia}")
+           return conta
+        else:
+            print("Usuário não encontrado.")
+
 
 def listar_contas(contas):
-    pass
+    print("---| Lista de Contas - Banco Python |---".center(50))
+    for conta in contas:
+        print(f"Agência: {conta[0]} | Conta: {conta[1]} - {conta[2].upper()}")
+
 
 def main():
     AGENCIA = "0001"
@@ -133,6 +149,12 @@ def main():
 
         elif opcao == "lu":
             listar_usuarios(usuarios)
+
+        elif opcao == "c":
+            contas.append(criar_conta(agencia=AGENCIA, numero_conta=len(contas), usuarios=usuarios))
+
+        elif opcao == "l":
+            listar_contas(contas)
 
         elif opcao == "q":
             break
