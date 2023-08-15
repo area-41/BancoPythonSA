@@ -68,20 +68,25 @@ def criar_usuario(usuarios):
     return usuarios
 
 
-def filtrar_usuario(cpf, usuarios):
-    pass
+def filtrar_usuario(usuarios):
+    usuario = str(input("Qual usuário deseja procurar?"))
+    for i in usuarios:
+        if i == usuario[0]:
+            print(i)
+        else:
+            print("Usuário não encontrado.")
 
 def listar_usuarios(usuarios):
     for usuario in usuarios:
-        print(f"Usuário: {usuario[0]} {usuario[1]} - CPF: {usuario[2]}")
+        print(f"Usuário: {usuario[0].upper()} {usuario[1].upper()} - CPF: {usuario[2]}")
 
 
 def criar_conta(agencia, numero_conta, usuarios):
     usuario = str(input("Qual usuário quer adicionar à conta? "))
-    print(usuarios)
+    saldo = 0
     for i in range(len(usuarios)):
         if usuario == usuarios[i][0]:
-           conta = agencia, numero_conta, usuario
+           conta = agencia, numero_conta, usuario, saldo
            print(f"\nConta com {usuario} criada com sucesso."
                  f"\nNúmero da conta: {numero_conta}"
                  f"\nAgência: {agencia}")
@@ -93,7 +98,7 @@ def criar_conta(agencia, numero_conta, usuarios):
 def listar_contas(contas):
     print("---| Lista de Contas - Banco Python |---".center(50))
     for conta in contas:
-        print(f"Agência: {conta[0]} | Conta: {conta[1]} - {conta[2].upper()}")
+        print(f"Agência: {conta[0]} | Conta: {conta[1]} - {conta[2].upper()} Saldo: {conta[3]}")
 
 
 def main():
@@ -103,8 +108,8 @@ def main():
     extrato = ""
     numero_saques = 0
 
-    usuarios = []
-    contas = []
+    usuarios = [("Pedro", "Alcantara", 26743947536), ("Ana", "Montenegro", 36538546837)]
+    contas = [("0001", 2, "Pedro", 3045.89), ("0001", 3, "Ana", 34360.78)]
 
     while True:
         opcao = menu()
