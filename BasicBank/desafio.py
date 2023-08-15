@@ -17,15 +17,19 @@ def menu():
     return input(textwrap.dedent(menu))
 
 
-def depositar(valor, saldo, extrato, /):
-    if valor > 0:
-        saldo += valor
-        extrato += f"Depósito: R$ {valor:.2f}\n"
-        sucesso = f"O Depósito de R$ {valor:.2f} realizado com sucesso!"
-        print("\n", sucesso.center(40))
-        return saldo, extrato
-    else:
-        print("Operação falhou! O valor informado é inválido.")
+def depositar(contas):
+    conta_deposito = int(input("Informe a conta para o depósito: "))
+    for i in range(len(contas)):
+        if conta_deposito == contas[i][1]:
+            valor = float(input("Informe o valor do depósito: "))
+            if valor > 0:
+                contas[i][3] = contas[i][3] + valor
+                contas[i][4].append(f"Depósito: R$ {valor:.2f}")
+                sucesso = f"O Depósito de R$ {valor:.2f} realizado com sucesso!"
+                print("\n", sucesso.center(40))
+
+            else:
+                print("Operação falhou! O valor informado é inválido.")
 
 
 def sacar(saldo, valor, extrato, limite, numero_saques):
@@ -98,7 +102,9 @@ def criar_conta(agencia, numero_conta, usuarios):
 def listar_contas(contas):
     print("---| Lista de Contas - Banco Python |---".center(50))
     for conta in contas:
-        print(f"Agência: {conta[0]} | Conta: {conta[1]} - {conta[2].upper()} Saldo: {conta[3]}")
+        print(f"\nAgência: {conta[0]} | Conta: {conta[1]} - {conta[2].upper()}"
+              f"\nSaldo: {conta[3]}"
+              f"\nExtrato: {conta[4]}\n")
 
 
 def main():
@@ -109,20 +115,12 @@ def main():
     numero_saques = 0
 
     usuarios = [("Pedro", "Alcantara", 26743947536), ("Ana", "Montenegro", 36538546837)]
-    contas = [("0001", 2, "Pedro", 3045.89), ("0001", 3, "Ana", 34360.78)]
+    contas = [["0001", 2, "Pedro", 3045.89, ["Depósito R$ 3045.89"]], ["0001", 3, "Ana", 34360.78, ["Depósito R$ 34360.78"]]]
 
     while True:
         opcao = menu()
         if opcao == "d":
-            valor = float(input("Informe o valor do depósito: "))
-            saldo, extrato = depositar(valor, saldo, extrato)
-
-            # try:
-            #     valor = float(input("Informe o valor do depósito: "))
-            #     if valor is float:
-            #         saldo, extrato = depositar(valor, saldo, extrato)
-            # except:
-            #     print("Valor inválido.")
+            depositar(contas=contas)
 
         elif opcao == "s":
             valor = float(input("Informe o valor do saque: "))
