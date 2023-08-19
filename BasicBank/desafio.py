@@ -29,7 +29,7 @@ def depositar(contas):
                     contas[i][3] += valor
                     contas[i][4].append(f"Depósito: R$ {valor:.2f}")
                     sucesso = f"O Depósito de R$ {valor:.2f} realizado com sucesso!"
-                    print("\n", sucesso.center(40),f"\n\tSaldo atualizado: R$ {contas[i][3]}")
+                    print("\n", sucesso.center(40), f"\n\tSaldo atualizado: R$ {contas[i][3]}")
                     break
                 else:
                     print("Operação falhou! O valor informado é inválido.")
@@ -39,7 +39,6 @@ def depositar(contas):
                 break
     else:
         print("Conta não encontrada.")
-
 
 
 def sacar(contas, numero_saques):
@@ -71,11 +70,26 @@ def sacar(contas, numero_saques):
         print("Operação falhou! O valor informado é inválido.")
 
 
-def exibir_extrato(saldo, /, *, extrato):
-    print("\n================ EXTRATO ================")
-    print("Não foram realizadas movimentações." if not extrato else extrato)
-    print(f"\nSaldo: R$ {saldo:.2f}")
-    print("==========================================")
+def exibir_extrato(contas):
+    conta = int(input("Qual conta deseja ver o extrato? "))
+    for i in contas:
+        if conta == i[1]:
+            if i[1] == "":
+                print("\n","*"*15," EXTRATO ", "*"*15,"\n")
+                print("\n================ EXTRATO ================")
+                print("Não foram realizadas movimentações.")
+            else:
+                print(" EXTRATO ".center(80, "="))
+                for j in range(len(i[4])):
+                    print(i[4][j])
+                print("-"*80)
+                print(f"Saldo: R$ {i[3]:.2f}")
+                print("="*80)
+
+
+def exibir_usuario(usuario):
+    print(f"\nUsuário {usuario[0]} {usuario[1]}".center(200),
+          f"\nCPF: {usuario[2][0:4]}".center(200))
 
 
 def criar_usuario(usuarios):
@@ -89,14 +103,15 @@ def criar_usuario(usuarios):
     return usuarios
 
 
-def filtrar_usuario(usuarios):
-    usuario = str(input("Qual usuário deseja procurar?"))
+def procurar_usuario(usuarios):
+    usuario = str(input("Qual usuário deseja procurar? "))
     usuario = usuario.title()
     for i in usuarios:
-        if i == usuario[0]:
+        if usuario == i[0]:
             print(i)
-        else:
-            print("Usuário não encontrado.")
+            break
+    else:
+        print("Usuário não encontrado.")
 
 
 def listar_usuarios(usuarios):
@@ -132,7 +147,6 @@ def criar_conta(usuarios, contas):
         print("Usuário não encontrado.")
 
 
-
 def listar_contas(contas):
     print("---| Lista de Contas - Banco Python |---".center(50))
     for conta in contas:
@@ -147,9 +161,16 @@ def main():
     # extrato = ""
     numero_saques = 0
 
-    usuarios = [["João", "Macedo", 43566785476], ["Pedro", "Alcantara", 26743947536], ["Ana", "Montenegro", 36538546837]]
+    usuarios = [["João", "Macedo", 43566785476],
+                ["Pedro", "Alcantara", 26743947536],
+                ["Ana", "Montenegro", 36538546837],
+                ["Marcos", "Strunksky", 267535678934],
+                ["Josete", "Oliveira", 24467343974]]
+
     contas = [["0001", 1, "Pedro", 3045.89, ["Depósito R$ 3045.89"]],
-              ["0001", 2, "Ana", 34360.78, ["Depósito R$ 34360.78"]]]
+              ["0001", 2, "Ana", 34360.78, ["Depósito R$ 34360.78"]],
+              ["0001", 3, "Marcos", 360.78, ["Depósito R$ 360.78"]],
+              ["0001", 4, "Josete", 1200.00, ["Depósito R$ 300.00", "Depósito R$ 300.00", "Depósito R$ 300.00", "Depósito R$ 300.00"]]]
 
     while True:
         opcao = menu()
@@ -187,7 +208,7 @@ def main():
             listar_usuarios(usuarios)
 
         elif opcao == "pu":
-            filtrar_usuario(usuarios)
+            procurar_usuario(usuarios)
 
         elif opcao == "c":
             criar_conta(usuarios, contas)
