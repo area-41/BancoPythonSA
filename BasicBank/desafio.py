@@ -22,14 +22,14 @@ def depositar(contas):
     conta_deposito = int(input("Informe a conta para o depósito: "))
     for i in range(len(contas)):
         if conta_deposito == contas[i][1]:
-            confirmacao = str(input(f"Para a conta de {contas[i][2]}? (S/N)")).upper()
+            confirmacao = str(input(f"Para a conta de {contas[i][2]}? (S/N) ")).upper()
             if confirmacao == "S":
                 valor = float(input("Informe o valor do depósito: "))
                 if valor > 0:
                     contas[i][3] += valor
                     contas[i][4].append(f"Depósito: R$ {valor:.2f}")
                     sucesso = f"O Depósito de R$ {valor:.2f} realizado com sucesso!"
-                    print("\n", sucesso.center(40), f"\n\tSaldo atualizado: R$ {contas[i][3]}")
+                    print("\n", sucesso.center(40), f"\n\tSaldo atualizado: R$ {contas[i][3]:.2f}")
                     break
                 else:
                     print("Operação falhou! O valor informado é inválido.")
@@ -42,30 +42,29 @@ def depositar(contas):
 
 
 def sacar(contas, numero_saques):
-    limite = 500
+    limite = 500.00
     conta_saque = int(input("Informe a conta para o saque: "))
     for i in range(len(contas)):
         if conta_saque == contas[i][1]:
             valor = float(input("Informe o valor do saque: "))
-            excedeu_saldo = valor > contas[i][1]
+            excedeu_saldo = valor > float(contas[i][3])
             excedeu_limite = valor > limite
             excedeu_saques = numero_saques >= LIMITE_SAQUES
             if excedeu_saldo:
                 print("Operação falhou! Você não tem saldo suficiente.")
+                break
             elif excedeu_limite:
                 print("Operação falhou! O valor do saque excede o limite.")
+                break
             elif excedeu_saques:
                 print("Operação falhou! Número máximo de saques excedido.")
+                break
             elif valor > 0:
                 contas[i][3] -= valor
-                contas[i][4] += f"Saque: R$ {valor:.2f}\n"
+                contas[i][4].append(str(f"Saque: R$ {valor:.2f}"))
                 numero_saques += 1
-                return numero_saques, contas
-            # elif valor > 0:
-            #     saldo -= valor
-            #     extrato += f"Saque: R$ {valor:.2f}\n"
-            #     numero_saques += 1
-            #     return saldo, extrato
+                print(f"Saque de {valor} realizado com sucesso!")
+                break
     else:
         print("Operação falhou! O valor informado é inválido.")
 
@@ -75,11 +74,10 @@ def exibir_extrato(contas):
     for i in contas:
         if conta == i[1]:
             if i[1] == "":
-                print("\n","*"*15," EXTRATO ", "*"*15,"\n")
-                print("\n================ EXTRATO ================")
+                print("| EXTRATO - Banco Python |".center(80, "="))
                 print("Não foram realizadas movimentações.")
             else:
-                print(" EXTRATO ".center(80, "="))
+                print("| EXTRATO - Banco Python |".center(80, "="))
                 for j in range(len(i[4])):
                     print(i[4][j])
                 print("-"*80)
@@ -115,8 +113,10 @@ def procurar_usuario(usuarios):
 
 
 def listar_usuarios(usuarios):
+    print("| Lista de Usuários - Banco Python |".center(80, "-"))
     for usuario in usuarios:
-        print(f"Usuário: {usuario[0]} {usuario[1]} - CPF: {usuario[2]}")
+        print(f"|\tNome: {usuario[0]} {usuario[1]}".ljust(37, " "), f"| CPF: {usuario[2]} |".rjust(40, " "))
+        print("".center(80, "-"))
 
 
 def criar_conta(usuarios, contas):
@@ -148,29 +148,32 @@ def criar_conta(usuarios, contas):
 
 
 def listar_contas(contas):
-    print("---| Lista de Contas - Banco Python |---".center(50))
+    print("| Lista de Contas - Banco Python |".center(80, "-"))
     for conta in contas:
-        print(f"\nAgência: {conta[0]} | Conta: {conta[1]} - {conta[2]}"
-              f"\nSaldo: {conta[3]}"
-              f"\nExtrato: {conta[4]}\n")
+        print(f"\n| Agência: {conta[0]} | Conta: {conta[1]} - {conta[2]}"
+              f"\n| Saldo: {conta[3]:.2f}"
+              f"\n| Extrato: ")
+        for i in range(len(conta[4])):
+            print("\t", conta[4][i])
+        print("".center(80, "-"))
 
 
 def main():
-    # saldo = 0
-    limite = 500
-    # extrato = ""
     numero_saques = 0
 
     usuarios = [["João", "Macedo", 43566785476],
                 ["Pedro", "Alcantara", 26743947536],
                 ["Ana", "Montenegro", 36538546837],
-                ["Marcos", "Strunksky", 267535678934],
+                ["Maria", "Grutsky", 32239854897],
+                ["Marcos", "Strunksky", 26753578934],
                 ["Josete", "Oliveira", 24467343974]]
 
     contas = [["0001", 1, "Pedro", 3045.89, ["Depósito R$ 3045.89"]],
               ["0001", 2, "Ana", 34360.78, ["Depósito R$ 34360.78"]],
               ["0001", 3, "Marcos", 360.78, ["Depósito R$ 360.78"]],
-              ["0001", 4, "Josete", 1200.00, ["Depósito R$ 300.00", "Depósito R$ 300.00", "Depósito R$ 300.00", "Depósito R$ 300.00"]]]
+              ["0001", 4, "Josete", 1200.00, ["Depósito R$ 300.00", "Depósito R$ 300.00",
+                                              "Depósito R$ 300.00", "Depósito R$ 300.00"]],
+              ["0001", 5, "Maria", 4223.85, ["Depósito R$ 4223.85"]]]
 
     while True:
         opcao = menu()
@@ -178,25 +181,7 @@ def main():
             depositar(contas)
 
         elif opcao == "s":
-            numero_saques, contas = sacar(contas, numero_saques)
-
-            # valor = float(input("Informe o valor do saque: "))
-            # excedeu_saldo = valor > saldo
-            # excedeu_limite = valor > limite
-            # excedeu_saques = numero_saques >= LIMITE_SAQUES
-            #
-            # if excedeu_saldo:
-            #     print("A operação falhou, saldo insuficiente.")
-            # if excedeu_limite:
-            #     print("A operação falhou, valor saque excede o limite.")
-            # if excedeu_saques:
-            #     print("A operação falhou, atingiu o limite de saques.")
-            # elif valor > 0:
-            #     saldo -= valor
-            #     extrato += f"Saque: R$ {valor:.2f}\n"
-            #     numero_saques += 1
-            # else:
-            #     print("Operação falhou, valor inválido.")
+            sacar(contas, numero_saques)
 
         elif opcao == "e":
             exibir_extrato(contas)
